@@ -213,7 +213,7 @@ double kmeans_wilber::get_actual_cost(size_t n, std::unique_ptr<kmeans_result> &
 
     std::vector<double> centers;
     std::vector<size_t> path;
-    //res->path.clear();
+    res->path.clear();
     res->path.push_back(m);
     while (m != 0) {
         size_t prev = bestleft[m];

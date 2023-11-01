@@ -17,7 +17,7 @@ test : $(TEST)
 clean:
 	$(RM) $(EXEC) $(TEST) $(OBJS)
 
-$(EXEC): $(OBJS) run.c
+$(EXEC): $(OBJS) run.cpp
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) -o $@ $^
 
 $(TEST) : $(OBJS) test.cpp
