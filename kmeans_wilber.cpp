@@ -200,7 +200,12 @@ std::unique_ptr<kmeans_result> kmeans_wilber::compute_and_report(size_t k) {
 
 double kmeans_wilber::weight(size_t i, size_t j) {
     if (i >= j) return std::numeric_limits<double>::max();
-    return is.cost_interval_l2(i, j-1) + lambda;
+    else{
+      std::cout<<"[ f["<<i<<"]="<<f[i]<<" ]"<<std::endl;
+      std::cout<<"[ weight("<<i<<","<<j<<") ]"<<std::endl;
+      std::cout<<"[ lambda="<<lambda<<" ]"<<std::endl;
+      return is.cost_interval_l2(i, j-1) + lambda;
+    }
 }
 
 double kmeans_wilber::g(size_t i, size_t j) {
@@ -387,6 +392,8 @@ std::pair<double, size_t> kmeans_wilber::wilber(size_t n) {
             c = p;
         }
     }
+    //std::cout<<"f:"<<std::endl;
+    //print_vector(f);
     // find length
     size_t m = n;
     size_t length = 0;
