@@ -121,7 +121,10 @@ std::pair<std::unique_ptr<kmeans_result>, bool> kmeans_wilber::compute_interpola
     
     while (true) {
          ++cnt;
-	 //std::cout << "\r" << "[Step = " << cnt <<  ", k_found = " << k << "]" << std::flush;
+	    std::cout << "\r" << "[Step = " << cnt <<  ", k_found = " << k << "]" << std::flush;
+        // std::cout << "\r" << "[hi_k = " << hi_k <<  ", low_k = " << lo_k << "]" << std::flush;
+        // std::cout << "\r" << "[c_low = " << lo_intercept <<  ", c_high = " << hi_intercept << "]" << std::flush;
+
 
         lambda = (hi_intercept - lo_intercept) / (lo_k - hi_k);
 
@@ -199,11 +202,35 @@ std::unique_ptr<kmeans_result> kmeans_wilber::compute_and_report(size_t k) {
 }
 
 double kmeans_wilber::weight(size_t i, size_t j) {
+    // std::cout<< "i=" << i <<",j="<<j<<std::endl;
+    // std::cout<< "f:"<<std::endl;
+    // print_vector(f);
     if (i >= j) return std::numeric_limits<double>::max();
-    return is.cost_interval_l2(i, j-1) + lambda;
+    // else {
+    //     if (i<j-1) {
+    //     std::cout<< "weight("<< i << "," << j << ") = interval_cost + lambda ("<<lambda
+    //              <<")"
+    //              <<std::endl;
+    //     //          <<is.cost_interval_l2(i, j-1) + lambda<<std::endl;
+    //     }
+    //     return is.cost_interval_l2(i, j-1) + lambda;
+    // }
+        else{
+      std::cout<<"[ f["<<i<<"]="<<f[i]<<" ]"<<std::endl;
+      print_vector(f);
+      std::cout<<"[ weight("<<i<<","<<j<<") ]"<<std::endl;
+      std::cout<<"[ lambda="<<lambda<<" ]"<<std::endl;
+      return is.cost_interval_l2(i, j-1) + lambda;
+    }
 }
 
 double kmeans_wilber::g(size_t i, size_t j) {
+    // std::cout << "f[" << i <<"]:"<<f[i]
+    //         //   << " weight("<< i << "," << j << "):" << weight(i,j)
+    //         //   << " g("<< i << "," << j << "):" << f[i] + weight(i, j)
+    //           << " lambda:"<< lambda << std::endl;
+    // std::cout<< "f:"<<std::endl;
+    // print_vector(f);
     return f[i] + weight(i, j);
 }
 
@@ -229,6 +256,8 @@ double kmeans_wilber::get_actual_cost(size_t n, std::unique_ptr<kmeans_result> &
         res->centers[i] = centers[centers.size() - i - 1];
     }
     res->cost = cost;
+    // std::cout<<"path:";
+    // print_vector(res->path);
     return cost;
 }
 
@@ -346,7 +375,7 @@ std::vector<double> kmeans_wilber::smawk_naive(size_t i0, size_t i1, size_t j0, 
 }
 
 std::pair<double, size_t> kmeans_wilber::wilber(size_t n) {
-  //std::cout << "call " << name() << " with lambda=" << lambda << std::endl;
+  std::cout << "call " << name() << " with lambda=" << lambda << std::endl;
     f.resize(n+1, 0);
     bestleft.resize(n+1, 0);
     f[0] = 0;
@@ -390,10 +419,16 @@ std::pair<double, size_t> kmeans_wilber::wilber(size_t n) {
     // find length
     size_t m = n;
     size_t length = 0;
+    std::cout<<"[bestleft]"<<std::endl;
+    print_vector(bestleft);
     while (m > 0) {
+        std::cout<<"[m, bestleft[m]]"
+                 <<m<<","<<bestleft[m]<<std::endl;
         m = bestleft[m];
         ++length;
     }
+    std::cout<<"[ f ]"<<std::endl;
+    print_vector(f);
     return std::make_pair(f[n], length);
 
 }
