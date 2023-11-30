@@ -416,6 +416,8 @@ std::pair<double, size_t> kmeans_wilber::wilber(size_t n) {
             c = p;
         }
     }
+    //std::cout<<"f:"<<std::endl;
+    //print_vector(f);
     // find length
     size_t m = n;
     size_t length = 0;
